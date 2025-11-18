@@ -33,10 +33,10 @@ const EduItem = (prop: Education) => {
   );
 };
 export const PreviewEdu = () => {
-  const { education } = useResume("education");
+  const { data } = useResume("education");
   return (
     <EduLayout>
-      {education.map((edu) => (
+      {data.map((edu) => (
         <EduItem {...edu} key={edu.id} />
       ))}
     </EduLayout>

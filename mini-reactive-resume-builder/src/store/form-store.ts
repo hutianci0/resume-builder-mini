@@ -2,9 +2,12 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 // Make IEdit generic so each store can specify the setField parameter type.
-interface IEdit<TSet extends PersonalInfo | Education | Experience | string> {
+interface IEdit<
+  TSet extends PersonalInfo | Education[] | Experience[] | Skill,
+> {
   reset: () => void;
   setField: (data: TSet) => void;
+  Add?: () => void;
 }
 interface PersonalInfo {
   name?: string;
@@ -25,12 +28,18 @@ export interface Education {
   date?: string;
 }
 
-interface Experience {
+export interface Experience {
+  id: string;
   company: string;
   position: string;
-  start: string;
-  end: string;
-  description?: string;
+  location: string;
+  date: string;
+  description: string;
+}
+
+export interface Skill {
+  label: string;
+  data: string;
 }
 
 // PersonalStore's setField accepts a PersonalInfo object.
@@ -39,16 +48,24 @@ interface PersonalStore extends IEdit<PersonalInfo> {
 }
 
 // EducationStore's setField accepts a single Education entry while data is an array.
-interface EducationStore {
-  education: Education[];
-  addEducation: () => void;
-  updateEducation: (id: string, updated: Partial<Education>) => void;
-  deleteEducation: (id: string) => void;
-  reset: () => void;
+interface EducationStore extends IEdit<Education[]> {
+  data: Education[];
+
+  deleteForm: (id: string) => void;
 }
 
-interface ExperienceStore extends IEdit<Experience> {
+// ExperienceStore Interface
+interface ExperienceStore extends IEdit<Experience[]> {
   data: Experience[];
+  deleteForm: (id: string) => void;
+}
+
+// SkillStore Interface
+interface SkillStore extends IEdit<Skill> {
+  data: Skill[];
+  deleteItem: (title: string) => void;
+  UpdateField: (title: string, data: string) => void;
+  AddItem: ({ label, data }: Skill) => void;
 }
 
 export const usePersonalStore = create<PersonalStore>()(
@@ -65,57 +82,148 @@ export const usePersonalStore = create<PersonalStore>()(
 
 export const useEducationStore = create<EducationStore>()(
   persist(
-    (set, get) => ({
-      education: [
+    (set) => ({
+      data: [
         {
-          id: "1",
+          id: crypto.randomUUID(),
           school: "",
-          field: "",
           degree: "",
+          field: "",
+          location: "",
+          date: "",
         },
       ],
+      setField: (edu) =>
+        set(() => ({
+          data: edu,
+        })),
 
-      addEducation: () =>
-        set({
-          education: [
-            ...get().education,
-            {
-              id: crypto.randomUUID(),
-              school: "",
-              degree: "",
-              field: "",
-            },
-          ],
-        }),
-
-      updateEducation: (id, updated) =>
-        set({
-          education: get().education.map((e) =>
-            e.id === id ? { ...e, ...updated } : e,
-          ),
-        }),
-
-      deleteEducation: (id) =>
-        set({
-          education: get().education.filter((e) => e.id !== id),
-        }),
-
+      deleteForm: (id) =>
+        set((s) => ({
+          data: s.data.filter((ele) => ele.id !== id),
+        })),
       reset: () =>
         set({
-          education: [],
+          data: [],
         }),
+      Add: () =>
+        set((state) => ({
+          data: [
+            ...state.data,
+            {
+              id: crypto.randomUUID(),
+              field: "",
+              school: "",
+              degree: "",
+            },
+          ],
+        })),
     }),
-    { name: "resume-education" },
+    { name: "education" },
   ),
 );
 
 export const useExperienceStore = create<ExperienceStore>()(
   persist(
     (set) => ({
-      data: [],
+      data: [
+        {
+          id: crypto.randomUUID(),
+          company: "",
+          position: "",
+          date: "",
+          location: "",
+          description: "",
+        },
+      ],
       reset: () => set(() => ({ data: [] })),
-      setField: (data) => set((state) => ({ data: [...state.data, data] })),
+      setField: (data) => set(() => ({ data })), // both set and add
+      deleteForm: (id) =>
+        set((state) => ({ data: state.data.filter((ele) => ele.id !== id) })),
+      Add: () =>
+        set((state) => ({
+          data: [
+            ...state.data,
+            {
+              id: crypto.randomUUID(),
+              company: "",
+              position: "",
+              date: "",
+              location: "",
+              description: "",
+            },
+          ],
+        })),
     }),
+
     { name: "experience" },
+  ),
+);
+
+export const useSkillStore = create<SkillStore>()(
+  persist(
+    (set) => ({
+      data: [
+        {
+          label: "TechStack",
+          data: "",
+        },
+
+        {
+          label: "Modules",
+          data: "",
+        },
+        {
+          label: "Languages",
+          data: "",
+        },
+      ],
+      deleteItem: (title) =>
+        set((s) => ({
+          data: s.data.filter((i) => i.label !== title),
+        })),
+      reset: () =>
+        set({
+          data: [
+            {
+              label: "TechStack",
+              data: "",
+            },
+
+            {
+              label: "Modules",
+              data: "",
+            },
+            {
+              label: "Languages",
+              data: "",
+            },
+          ],
+        }),
+
+      setField: () => {},
+      UpdateField: (title, data) =>
+        set((s) => ({
+          data: s.data.map((i) =>
+            i.label === title ? { label: title, data } : i,
+          ),
+        })),
+      AddItem: ({ label, data }) =>
+        set((s) => {
+          const found = s.data.some((ele) => ele.label === label);
+
+          return {
+            data: found
+              ? s.data.map((ele) =>
+                  ele.label === label
+                    ? { ...ele, data: [ele.data, data].join(",") }
+                    : ele,
+                )
+              : [...s.data, { label, data }],
+          };
+        }),
+    }),
+
+    { name: "skills" },
   ),
 );

@@ -1,14 +1,26 @@
-import { useEducationStore, usePersonalStore } from "./form-store";
+import { useCustomeStore } from "./custome-store";
+import {
+  useEducationStore,
+  useExperienceStore,
+  usePersonalStore,
+  useSkillStore,
+} from "./form-store";
 
-export type resumeType = "personal" | "education" | "experience" | "skills";
+export type resumeType =
+  | "personal"
+  | "education"
+  | "experience"
+  | "skills"
+  | "custome";
 
 // 用泛型让返回类型根据参数自动变化
 export const useResume = <T extends resumeType>(type: T) => {
   const stores = {
     personal: usePersonalStore(),
     education: useEducationStore(),
-    experience: usePersonalStore(),
-    skills: usePersonalStore(),
+    experience: useExperienceStore(),
+    skills: useSkillStore(),
+    custome: useCustomeStore(),
   };
   return stores[type];
 };

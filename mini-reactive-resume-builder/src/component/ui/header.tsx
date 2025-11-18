@@ -2,6 +2,7 @@ import { useResume, type resumeType } from "@/store";
 import {
   BriefcaseBusiness,
   LaptopMinimalCheck,
+  Lightbulb,
   University,
   User,
   type LucideIcon,
@@ -30,6 +31,10 @@ const HeaderType: IHeaders = {
     label: "Skills",
     Icon: LaptopMinimalCheck,
   },
+  custome: {
+    label: "Custome",
+    Icon: Lightbulb,
+  },
 };
 
 type Itype = {
@@ -47,10 +52,13 @@ export const Reset = ({ type }: Itype) => {
 export const Header = ({ type }: Itype) => {
   const Icon = HeaderType[type].Icon;
   const label = HeaderType[type].label;
+
   return (
-    <section className="relative mb-1.5 flex items-center text-2xl">
-      <Icon />
-      <h1>{label}</h1>
+    <section className="relative mb-1.5 flex justify-between text-2xl">
+      <div className="flex items-center">
+        <Icon />
+        <h1>{label}</h1>
+      </div>
     </section>
   );
 };

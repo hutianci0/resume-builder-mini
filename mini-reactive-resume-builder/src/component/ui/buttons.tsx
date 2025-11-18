@@ -1,7 +1,7 @@
 import { useCountStore } from "@/store/coun-store";
 import { cn } from "@/utils/cn";
 
-export const Buttons = () => {
+export const Buttons = ({ max }: { max: number }) => {
   const { count, increment, decrement } = useCountStore();
 
   return (
@@ -12,7 +12,7 @@ export const Buttons = () => {
         </button>
       )}
       <button
-        onClick={increment}
+        onClick={() => increment(max)}
         className={cn("w-1/2", { "ml-[50%]": count === 0 })}
       >
         next
