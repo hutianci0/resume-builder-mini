@@ -7,13 +7,13 @@ import { SkillForm } from "./editor/skill-form";
 import { Buttons } from "./ui/buttons";
 
 /**TODO:
+ *  Update Edu and Exp UI : same as SKills
  * Custome section: Editor Form, Skills
  * complete Custome Form : Exp-like
  * Able to change section name  (Input)
  * save to store and local
  * complete Custome Form : Skill-like
  * Toogle section: DND
- * Try update Edu and Exp UI : same as SKills
  */
 export default function EditorPanel() {
   const ref = useRef<HTMLDivElement>(null);

@@ -4,7 +4,7 @@ import { useResume } from "@/store";
 import type { Skill } from "@/store/form-store";
 import { Ban } from "lucide-react";
 import { Header } from "../ui/header";
-import { OpenAddSkill, OpenSkillItem } from "../ui/open-dialog";
+import { OpenAddSkill, OpenSkillItem } from "./open-skill-dialog";
 
 const SkillItem = (prop: Skill) => {
   const { deleteItem } = useResume("skills");

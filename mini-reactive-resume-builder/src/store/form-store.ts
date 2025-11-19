@@ -2,9 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 // Make IEdit generic so each store can specify the setField parameter type.
-interface IEdit<
-  TSet extends PersonalInfo | Education[] | Experience[] | Skill,
-> {
+interface IEdit<TSet extends PersonalInfo | Education | Experience | Skill> {
   reset: () => void;
   setField: (data: TSet) => void;
   Add?: () => void;
@@ -48,14 +46,14 @@ interface PersonalStore extends IEdit<PersonalInfo> {
 }
 
 // EducationStore's setField accepts a single Education entry while data is an array.
-interface EducationStore extends IEdit<Education[]> {
+interface EducationStore extends IEdit<Education> {
   data: Education[];
 
   deleteForm: (id: string) => void;
 }
 
 // ExperienceStore Interface
-interface ExperienceStore extends IEdit<Experience[]> {
+interface ExperienceStore extends IEdit<Experience> {
   data: Experience[];
   deleteForm: (id: string) => void;
 }
@@ -93,10 +91,15 @@ export const useEducationStore = create<EducationStore>()(
           date: "",
         },
       ],
-      setField: (edu) =>
-        set(() => ({
-          data: edu,
-        })),
+      setField: (data) =>
+        set((s) => {
+          const isHere = s.data.some((i) => i.id === data.id);
+          return isHere
+            ? {
+                data: s.data.map((i) => (i.id === data.id ? { ...data } : i)),
+              }
+            : { data: [...s.data, data] };
+        }),
 
       deleteForm: (id) =>
         set((s) => ({
@@ -113,8 +116,9 @@ export const useEducationStore = create<EducationStore>()(
             {
               id: crypto.randomUUID(),
               field: "",
-              school: "",
+              school: "Add more",
               degree: "",
+              date: "",
             },
           ],
         })),
@@ -137,7 +141,15 @@ export const useExperienceStore = create<ExperienceStore>()(
         },
       ],
       reset: () => set(() => ({ data: [] })),
-      setField: (data) => set(() => ({ data })), // both set and add
+      setField: (data) =>
+        set((s) => {
+          const isHere = s.data.some((i) => i.id === data.id);
+          return isHere
+            ? {
+                data: s.data.map((i) => (i.id === data.id ? { ...data } : i)),
+              }
+            : { data: [...s.data, data] };
+        }),
       deleteForm: (id) =>
         set((state) => ({ data: state.data.filter((ele) => ele.id !== id) })),
       Add: () =>
