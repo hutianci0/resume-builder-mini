@@ -1,7 +1,7 @@
-import { useResume } from "@/store";
+import { useSkillStore } from "@/store/form-store";
 
 export const PreviewSkill = () => {
-  const { data } = useResume("skills");
+  const data = useSkillStore((s) => s.data);
   return (
     <>
       {" "}

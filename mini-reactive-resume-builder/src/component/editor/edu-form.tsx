@@ -1,13 +1,12 @@
 import { Form } from "@/component/ui/form";
 import { Button } from "@/components/ui/button";
-import { useResume } from "@/store";
-import type { Education } from "@/store/form-store";
+import { useEducationStore, type Education } from "@/store/form-store";
 import { Ban } from "lucide-react";
 import { Header } from "../ui/header";
 import { OpenEduItem } from "./open-edu-dialog";
 
 const EduItem = (prop: Education) => {
-  const { deleteForm } = useResume("education");
+  const deleteForm = useEducationStore((s) => s.deleteForm);
   return (
     <div className="grid grid-cols-6 gap-2">
       <OpenEduItem data={prop}>
@@ -32,7 +31,7 @@ const EduItem = (prop: Education) => {
 };
 
 export const EduForm = () => {
-  const { data } = useResume("education");
+  const data = useEducationStore((s) => s.data);
   const defaultVaue = {
     id: crypto.randomUUID(),
     school: "",

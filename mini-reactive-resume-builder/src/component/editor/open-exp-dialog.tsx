@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useResume } from "@/store";
-import type { Experience } from "@/store/form-store";
-import { type ReactNode, useState } from "react";
+
+import { useExperienceStore, type Experience } from "@/store/form-store";
+import { useState, type ReactNode } from "react";
 import { toast } from "sonner";
 
 type IExp = {
@@ -21,7 +21,7 @@ type IExp = {
 export const OpenExpItem = ({ children, data }: IExp) => {
   const [isopen, setopen] = useState(false);
   const [draft, setdraft] = useState<Experience>(data);
-  const { setField } = useResume("experience");
+  const setField = useExperienceStore((s) => s.setField);
   return (
     <Dialog open={isopen} onOpenChange={setopen}>
       <DialogTrigger className="col-span-5">{children}</DialogTrigger>

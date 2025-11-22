@@ -1,5 +1,4 @@
-import { useResume } from "@/store";
-import type { Education } from "@/store/form-store";
+import { useEducationStore, type Education } from "@/store/form-store";
 import type React from "react";
 
 const EduLayout = ({ children }: { children: React.ReactNode }) => {
@@ -33,7 +32,7 @@ const EduItem = (prop: Education) => {
   );
 };
 export const PreviewEdu = () => {
-  const { data } = useResume("education");
+  const data = useEducationStore((s) => s.data);
   return (
     <EduLayout>
       {data.map((edu) => (

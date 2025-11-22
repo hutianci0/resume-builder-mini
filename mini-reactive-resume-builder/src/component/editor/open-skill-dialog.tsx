@@ -1,23 +1,25 @@
-import { DialogFooter, DialogHeader } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { useResume } from "@/store";
-import type { Skill } from "@/store/form-store";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
+  DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@radix-ui/react-dialog";
-import { type ReactNode, useState } from "react";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+import { useSkillStore, type Skill } from "@/store/form-store";
+
+import { useState, type ReactNode } from "react";
 
 type ISKill = {
   children: ReactNode;
   data: Skill;
 };
 export const OpenSkillItem = ({ children, data }: ISKill) => {
-  const { UpdateField } = useResume("skills");
+  const UpdateField = useSkillStore((s) => s.UpdateField);
   const [value, setvalue] = useState<Skill["data"]>(data.data);
   return (
     <Dialog>
@@ -46,7 +48,7 @@ export const OpenSkillItem = ({ children, data }: ISKill) => {
 };
 
 export const OpenAddSkill = ({ children }: { children: ReactNode }) => {
-  const { AddItem } = useResume("skills");
+  const AddItem = useSkillStore((s) => s.AddItem);
   const [skill, setSkill] = useState<Skill>({ label: "", data: "" });
   const handleClick = (skillData: Skill) => AddItem(skillData);
 

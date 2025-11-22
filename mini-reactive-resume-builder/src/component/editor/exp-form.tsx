@@ -1,7 +1,7 @@
 import { Form } from "@/component/ui/form";
 import { Button } from "@/components/ui/button";
-import { useResume } from "@/store";
-import type { Experience } from "@/store/form-store";
+
+import { useExperienceStore, type Experience } from "@/store/form-store";
 import { Ban } from "lucide-react";
 
 import { Header } from "../ui/header";
@@ -9,7 +9,7 @@ import { Header } from "../ui/header";
 import { OpenExpItem } from "./open-exp-dialog";
 
 const ExpItem = (prop: Experience) => {
-  const { deleteForm } = useResume("experience");
+  const deleteForm = useExperienceStore((s) => s.deleteForm);
   return (
     <div className="grid grid-cols-6 gap-2">
       <OpenExpItem data={prop}>
@@ -34,7 +34,7 @@ const ExpItem = (prop: Experience) => {
 };
 
 export const ExpForm = () => {
-  const { data } = useResume("experience");
+  const data = useExperienceStore((s) => s.data);
   const defaultVaue: Experience = {
     id: crypto.randomUUID(),
     company: "",

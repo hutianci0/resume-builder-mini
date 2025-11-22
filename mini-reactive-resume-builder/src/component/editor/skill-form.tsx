@@ -1,13 +1,12 @@
 import { Form } from "@/component/ui/form";
 import { Button } from "@/components/ui/button";
-import { useResume } from "@/store";
-import type { Skill } from "@/store/form-store";
+import { useSkillStore, type Skill } from "@/store/form-store";
 import { Ban } from "lucide-react";
 import { Header } from "../ui/header";
 import { OpenAddSkill, OpenSkillItem } from "./open-skill-dialog";
 
 const SkillItem = (prop: Skill) => {
-  const { deleteItem } = useResume("skills");
+  const deleteItem = useSkillStore((s) => s.deleteItem);
 
   return (
     <>
@@ -36,7 +35,7 @@ const SkillItem = (prop: Skill) => {
 };
 
 export const SkillForm = () => {
-  const { data } = useResume("skills");
+  const data = useSkillStore((s) => s.data);
 
   return (
     <Form type="skills">

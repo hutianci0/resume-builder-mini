@@ -1,5 +1,4 @@
-import { type resumeType } from "@/store";
-import { useCountStore } from "@/store/coun-store";
+import type { resumeType } from "@/store/form-store";
 import { cn } from "@/utils/cn";
 
 interface IForm extends React.ComponentProps<"form"> {
@@ -7,15 +6,8 @@ interface IForm extends React.ComponentProps<"form"> {
 }
 
 export const Form = ({ children, className }: IForm) => {
-  const { count } = useCountStore();
   return (
-    <form
-      className={cn(
-        "min-w-full flex-1 transform p-5 transition-all duration-500",
-        className,
-      )}
-      style={{ transform: `translateX(-${count * 100}%)` }}
-    >
+    <form className={cn("w-[500px] shrink-0 overflow-y-scroll p-5", className)}>
       {children}
     </form>
   );

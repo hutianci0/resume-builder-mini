@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from "react";
+import { useCountStore } from "@/store/coun-store";
+import { useCustomeStore } from "@/store/custome-store";
+import type { ReactNode } from "react";
 import { BasicForm } from "./editor/basic-form";
 import { CustomeForm } from "./editor/custome-form";
 import { EduForm } from "./editor/edu-form";
@@ -7,35 +9,53 @@ import { SkillForm } from "./editor/skill-form";
 import { Buttons } from "./ui/buttons";
 
 /**TODO:
- *  Update Edu and Exp UI : same as SKills
- * Custome section: Editor Form, Skills
- * complete Custome Form : Exp-like
- * Able to change section name  (Input)
- * save to store and local
- * complete Custome Form : Skill-like
  * Toogle section: DND
  */
-export default function EditorPanel() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [max, setMax] = useState<number>(0);
-  useEffect(() => {
-    if (ref.current) setMax(ref.current?.children.length);
-  }, [max]);
+
+// EditorContainer.jsx
+
+const EditorContainer = ({ children }: { children: ReactNode }) => {
+  const count = useCountStore((s) => s.count);
+
+  const slideStyle = {
+    transform: `translateX(-${count * 500}px)`,
+  };
+
+  return (
+    <section className="h-fit w-fit overflow-hidden rounded-2xl bg-white text-black shadow-2xl">
+      <div
+        className="flex max-h-[250px] w-[500px] flex-1 transition duration-500"
+        style={slideStyle}
+      >
+        {children}
+      </div>
+      <Buttons />
+    </section>
+  );
+};
+
+const CustomePanel = () => {
+  const data = useCustomeStore((s) => s.data);
   return (
     <>
-      <section className="flex h-fit flex-col rounded-2xl bg-white text-black shadow-2xl transition-all duration-500">
-        <div
-          className="flex max-h-[250px] w-[500px] flex-1 overflow-hidden overflow-y-scroll transition duration-500"
-          ref={ref}
-        >
-          <BasicForm />
-          <EduForm />
-          <ExpForm />
-          <SkillForm />
-          <CustomeForm />
-        </div>
-        <Buttons max={max} />
-      </section>
+      {data.map((i) => (
+        <CustomeForm key={i.id} data={i} sectionId={i.id} />
+      ))}
+    </>
+  );
+};
+
+export default function EditorPanel() {
+  return (
+    <>
+      <EditorContainer>
+        {" "}
+        <BasicForm />
+        <EduForm />
+        <ExpForm />
+        <SkillForm />
+        <CustomePanel />
+      </EditorContainer>
     </>
   );
 }

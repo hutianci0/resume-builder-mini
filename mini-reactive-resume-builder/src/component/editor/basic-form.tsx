@@ -10,7 +10,8 @@ interface BasicInfo {
 }
 
 export const BasicForm = () => {
-  const { data, setField } = usePersonalStore();
+  const data = usePersonalStore((s) => s.data);
+  const setField = usePersonalStore((s) => s.setField);
   const basicInfo: BasicInfo[] = [
     {
       label: "Full Name:",

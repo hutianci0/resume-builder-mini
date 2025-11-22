@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/dialog";
 import { Field, FieldGroup, FieldLabel, FieldSet } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useResume } from "@/store";
-import type { Education } from "@/store/form-store";
-import { type ReactNode, useState } from "react";
+
+import { useEducationStore, type Education } from "@/store/form-store";
+import { useState, type ReactNode } from "react";
 import { toast } from "sonner";
 
 type IEdu = {
@@ -21,7 +21,7 @@ type IEdu = {
 export const OpenEduItem = ({ children, data }: IEdu) => {
   const [isopen, setopen] = useState(false);
   const [draft, setdraft] = useState<Education>(data);
-  const { setField } = useResume("education");
+  const setField = useEducationStore((s) => s.setField);
   return (
     <Dialog open={isopen} onOpenChange={setopen}>
       <DialogTrigger className="col-span-5">{children}</DialogTrigger>

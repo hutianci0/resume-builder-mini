@@ -1,6 +1,12 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+export type resumeType =
+  | "personal"
+  | "education"
+  | "experience"
+  | "skills"
+  | "custome";
 // Make IEdit generic so each store can specify the setField parameter type.
 interface IEdit<TSet extends PersonalInfo | Education | Experience | Skill> {
   reset: () => void;
