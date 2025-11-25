@@ -27,8 +27,9 @@ const InfoItem = ({ Icon, Info, className }: IItem) => {
 
 export const PreviewPersonal = () => {
   const data = usePersonalStore((s) => s.data);
+
   return (
-    <section className="mb-[12mm] text-center">
+    <section className="text-center">
       <h1 className="mb-[3mm] text-[24pt] font-bold">{data.name}</h1>
       <p className="grid grid-cols-4 text-[10pt] text-gray-600">
         <InfoItem Info={data.headline} Icon={Briefcase} />

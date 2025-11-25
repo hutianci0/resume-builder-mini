@@ -87,7 +87,7 @@ export const HeaderCustom = ({ id }: { id: string }) => {
             onBlur={handleBlur}
             onChange={(e) => setName(e.target.value)}
             autoFocus
-            value={sectionName}
+            value={sectionName || ""}
           />
         ) : (
           <h1 onClick={() => setEditing(true)}>{sectionName || "Custome"}</h1>

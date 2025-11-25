@@ -1,7 +1,10 @@
+import { Button } from "@/components/ui/button";
 import { useCountStore } from "@/store/coun-store";
 import { useCustomeStore } from "@/store/custome-store";
 import type { ReactNode } from "react";
 import { BasicForm } from "./editor/basic-form";
+
+import { StyleForm } from "./editor/chang-style";
 import { CustomeForm } from "./editor/custome-form";
 import { EduForm } from "./editor/edu-form";
 import { ExpForm } from "./editor/exp-form";
@@ -10,10 +13,14 @@ import { Buttons } from "./ui/buttons";
 
 /**TODO:
  * Toogle section: DND
+ * able to change
+ * font-size: section title, section content, persoanl section is different
+ * spacing: spacing between item, section
+ * typography
+ * personal info:able to custome: icon + personal info
  */
 
 // EditorContainer.jsx
-
 const EditorContainer = ({ children }: { children: ReactNode }) => {
   const count = useCountStore((s) => s.count);
 
@@ -47,7 +54,8 @@ const CustomePanel = () => {
 
 export default function EditorPanel() {
   return (
-    <>
+    <div className="flex gap-2 lg:flex-col">
+      {" "}
       <EditorContainer>
         {" "}
         <BasicForm />
@@ -56,6 +64,8 @@ export default function EditorPanel() {
         <SkillForm />
         <CustomePanel />
       </EditorContainer>
-    </>
+      <Button onClick={() => window.print()}>Export as PDF</Button>
+      <StyleForm />
+    </div>
   );
 }

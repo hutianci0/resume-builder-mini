@@ -1,21 +1,14 @@
 import { useEducationStore, type Education } from "@/store/form-store";
-import type React from "react";
+import { useStyleStore } from "@/store/style-store";
+import { CommonLayout } from "./container";
 
-const EduLayout = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <section className="mb-[10mm]">
-      <h2 className="mb-2 border-b border-gray-300 pb-1 text-[14pt] font-semibold text-[#1a1a1a]">
-        Education
-      </h2>
-      {children}
-    </section>
-  );
-};
+//
 
 const EduItem = (prop: Education) => {
+  const itemGap = useStyleStore((s) => s.style.itemGap);
   return (
-    <div className="mt-[4mm]">
-      <div className="flex justify-between font-medium">
+    <div style={{ marginBottom: itemGap + "mm" }}>
+      <div className="flex justify-between font-semibold">
         <span>{prop.school}</span>
         <div className="flex gap-2">
           <span>{prop.date}</span>
@@ -34,10 +27,10 @@ const EduItem = (prop: Education) => {
 export const PreviewEdu = () => {
   const data = useEducationStore((s) => s.data);
   return (
-    <EduLayout>
+    <CommonLayout title="Education">
       {data.map((edu) => (
         <EduItem {...edu} key={edu.id} />
       ))}
-    </EduLayout>
+    </CommonLayout>
   );
 };
